@@ -2,8 +2,8 @@
 <html lang="fr">
 	<head>
 		<meta charset="utf-8">
-		<title>Hello World d'Evan</title>
-		<script src="jquery-1113min.js"></script>
+		<title>Hello World d'Evan v2</title>
+		<SCRIPT SRC="JQUERY-1113MIN.JS"></SCRIPT>
 	</head>
 	<style>
 	
@@ -27,7 +27,8 @@
 			left:0px;
 			top:300px;
 		}
-		.rond{
+		
+		#rond{
 			width:200px;
 			height:200px;
 			background-color:#069;
@@ -47,15 +48,6 @@
 			background-color:gray;
 		}
 		
-		#cache{
-			position: absolute;
-			right:75px;
-			bottom:75px;
-			background-color:#069;
-			height:50px;
-			width:60px;
-		}
-		
 		#affiche{
 			position: absolute;
 			left:100px;
@@ -69,26 +61,20 @@
 		<p class="paragraphe" id="t">Test</p>
 		<p class="paragraphe" id="b"> Bonjour tout le monde</p>
 		<p class="paragraphe" id="e">é</p>
-		<div class="rond"></div>
+		<div class="affiche" id="rond"></div>
 		<button id="affiche"></button>
-		<button id="cache"></button>
 		
 		<script>
-			$('#cache').click(function(){
-				$('.rond').hide();
-			});
-			
-			$('#cache').click(function(){
-				$('.paragraphe').show();
-			});
-			
-			$('#affiche').click(function(){
-				$('.paragraphe').hide();
-			});
-			
-			$('#affiche').click(function(){
-				$('.rond').show();
-			});
+			$('button').click(function(){
+				if ($('div').hasClass("affiche")){
+					$('div').hide();
+					$('div').addClass("cache");
+					$('div').removeClass("affiche");
+				}else{
+					$('#rond').show();
+					$('div').addClass("affiche");
+					$('div').removeClass("cache");
+			}})
 		</script>
 	</body>
 </html>
