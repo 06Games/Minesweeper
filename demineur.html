@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<title>Demineur</title>
+		<style>
+		
+			body{
+				<!--background-image: url('Drift_of_Harrachov_Mine_(308587800).jpg')-->
+			}
+			
+			table td{
+				border: 5px solid #ccc;
+				width: 60px;
+				height: 60px;
+				background-color: #f7f7f7;
+			}
+
+			table{
+				border-collapse: collapse;
+				position: absolute;
+				top:50px;
+				left:200px;
+			}
+			
+			.bomb{
+				background-image: url('bomb.png');
+				background-size: 60px 60px;			
+			}
+
+			button{
+				height:40px;
+				width:75px;
+			}
+			
+			#start{
+				position: absolute;
+				top:5px;
+				left:800px;
+			}
+			
+			#restart{
+			position: absolute;
+				top:5px;
+				left:700px;
+			}
+			
+		</style>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	</head>
+	<body>
+
+		<button id="start" class="stop">Start</button>
+		<button id="restart">Restart</button>
+		
+		<table>		
+		</table>
+
+		<script>
+			//demarage
+			$('#start').click(function(){
+				if ($('#start').hasClass("stop")){
+					drawGrid();
+					countAdjacentBombs();
+					$('#start').removeClass("stop");
+					$('#start').addClass("play");
+				}
+			});
+			
+			//redemarage
+			$('#restart').click(function(){
+				$('tr').remove();
+				$('#start').removeClass("play");
+				$('#start').addClass("stop");
+				y = 0
+				x = 0
+			});
+			
+			var width = 18; // nombre de colonnes
+			var height = 10; // nombre de lignes
+			var CBombe = 0.3;//chance d'avoir une bombe
+			
+			// get DOM reference to table via selector table
+			var table = $('table');		
+			
+			// fonction qui trace la grille et place les bombes
+			function drawGrid(){
+
+				for (x = 0; x < height; x++) { 
+
+					// crée une ligne
+					var newRow = $('<tr></tr>');
+
+					for (y = 0; y < width; y++) { 
+
+						/// crée une colonne
+						var cell = $('<td></td>');						
+						
+						// système de coordonnées
+						cell.addClass('row'+x); // classe des lignes
+						cell.addClass('col'+y); // classe des colonnes
+
+						var random = 10*Math.random(); // génère un nombre entre 0 et 10
+						
+						//generation des bombes
+						if(random < CBombe){
+						      cell.addClass('bomb');
+						}
+	
+						newRow.append(cell);
+	
+					}
+
+					/// ajoute le tableau
+					table.append(newRow);
+				}
+				
+			} // fin de la fonction drawGrid
+
+			x = 0
+			y = 0
+			
+			// fonction qui permet de calculer, pour chaque case de la grille qui n'est pas une bombe
+			
+			// le nombre de bombes adjacentes
+			function countAdjacentBombs(){
+				for (x = 0; x < height; x++){
+					for (y = 0; y < width; y++){
+						// si la case sur laquelle on est (x;y) n'est pas une bombe, alors...
+						if( !$('.row'+x+'.col'+y).hasClass('bomb') ){
+
+							var count = 0; // compteur de bombes
+
+							if($('.row'+(x-1)+'.col'+(y-1)).hasClass('bomb')){ count++;}
+							if($('.row'+(x-1)+'.col'+y).hasClass('bomb')){ count++;}
+							if($('.row'+(x-1)+'.col'+(y+1)).hasClass('bomb')){ count++;}
+							if($('.row'+x+'.col'+(y+1)).hasClass('bomb')){ count++;}
+							if($('.row'+x+'.col'+(y-1)).hasClass('bomb')){ count++;}
+							if($('.row'+(x+1)+'.col'+(y-1)).hasClass('bomb')){ count++;}
+							if($('.row'+(x+1)+'.col'+y).hasClass('bomb')){ count++;}
+							if($('.row'+(x+1)+'.col'+(y+1)).hasClass('bomb')){ count++;}
+
+							// on met la valeur du compteur dans la case (x;y)
+							$('.row'+x+'.col'+y).text(count); 
+						}
+					}
+				} 
+			} // fin de la fonction countAdjacentBombs	
+			
+		</script>
+	</body>
+</html>

@@ -6,12 +6,39 @@
 		<SCRIPT SRC="JQUERY-1113MIN.JS"></SCRIPT>
 	</head>
 	<style>
-	
+		
+		#ef{
+			background-color:#bfbfde;
+		}
+		
+		.ert{
+			background-color:black;
+		}
+		
+		.a{
+			background-color:#7193a2;
+		}
+		
+		table{
+			position: absolute;
+			left:60px;
+			top:200px;
+			color:blue;
+			border:1px double #ccc;
+			height:100px;
+			width:125px;
+		}
+		
+		td{
+			border:1px double #ccc;
+		}
+		
 		#t{
 			background-color:blue;
 			position: absolute;
 			left:0px;
 			top:0px;
+			font-style:oblique;
 		}
 		
 		#b{
@@ -19,6 +46,7 @@
 			position: absolute;
 			left:0px;
 			top:150px;
+			font-style:italic;
 		}
 		
 		#e{
@@ -50,9 +78,9 @@
 		
 		#affiche{
 			position: absolute;
-			left:100px;
-			top:75px;
-			background-color:blue;
+			right:75px;
+			bottom:75px;
+			background-color:#069;
 			height:50px;
 			width:60px;
 		}
@@ -63,7 +91,19 @@
 		<p class="paragraphe" id="e">é</p>
 		<div class="affiche" id="rond"></div>
 		<button id="affiche"></button>
-		
+		<table>
+			<tr>
+				<td class="a">1</td>
+				<td id="ef">2</td>
+				<td class="a">3</td>
+			</tr>
+			<tr>
+				<td class="ert">2</td>
+				<td class="a">3</td>
+				<td class="ert">1</td>
+			</tr>
+		</table>
+	
 		<script>
 			$('button').click(function(){
 				if ($('div').hasClass("affiche")){

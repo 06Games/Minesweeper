@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<title>Demineur</title>
+		<style>
+			table td {
+				border: 5px solid#ccc;
+				width: 60px;
+				height: 60px;
+				background-color: #f7f7f7;
+			}
+
+			table {
+				border-collapse: collapse;
+			}
+			
+			.bomb{
+				background-image: url('bomb.png');
+				background-size: 65px 65px;
+			}
+
+			button{
+				position: absolute;
+				left:200px;
+				top:300px;
+				height:40px;
+				width:75px;
+				font-weight : bold;
+			}
+		</style>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	</head>
+	<body>
+		
+		<button>Start</button>
+		
+		<!-- base du tableau -->
+		<table>
+		</table>
+
+		<script>
+
+			// generation du tableau
+			
+			// taille du tableau
+			var width = 7;
+			var height = 4;
+
+			// get DOM reference to table via selector table
+			var table = $('table');
+			for (x = 0; x < height; x++) { 
+
+				// crée une ligne
+				var newRow = $('<tr></tr>');
+
+				for (y = 0; y < width; y++) { 
+
+					/// crée une colonne 	
+					var cell = $('<td></td>');
+
+					////// generation des bombes
+					if(Math.random() < 0.3) {
+						cell.addClass('bomb');
+					}
+					
+					newRow.append(cell);
+				}
+
+				/// ajoute le tableau 
+				table.append(newRow);
+			}
+			
+		</script>
+	</body>
+</html>
