@@ -3,8 +3,14 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Demineur</title>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<style>
 		
+			.cache{
+				font-size:0px;
+				background-size: 0px 0px;
+			}
+				
 			body{
 				<!--background-image: url('Drift_of_Harrachov_Mine_(308587800).jpg')-->
 			}
@@ -23,7 +29,7 @@
 				left:200px;
 			}
 			
-			.bomb{
+			.afficheBomb{
 				background-image: url('bomb.png');
 				background-size: 60px 60px;			
 			}
@@ -40,23 +46,28 @@
 			}
 			
 			#restart{
-			position: absolute;
+				position: absolute;
 				top:5px;
 				left:700px;
 			}
 			
 		</style>
-		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	</head>
 	<body>
-
+		
 		<button id="start" class="stop">Start</button>
 		<button id="restart">Restart</button>
+		<button id="triche">SUPER TRICHE</button>
+		<button id="facile">FACILE</button>
+		<button id="moyen">MOYEN</button>
+		<button id="difficile">DIFFICILE</button>
+		<button id="hardcore">HARDCORE</button>
 		
 		<table>		
 		</table>
 
 		<script>
+		
 			//demarage
 			$('#start').click(function(){
 				if ($('#start').hasClass("stop")){
@@ -72,18 +83,24 @@
 				$('tr').remove();
 				$('#start').removeClass("play");
 				$('#start').addClass("stop");
-				y = 0
-				x = 0
+				y = 0;
+				x = 0;
 			});
+			
+			//triche
+			$('#triche').click(function(){
+				$('.bomb').addClass('afficheBomb')
+			})
 			
 			var width = 18; // nombre de colonnes
 			var height = 10; // nombre de lignes
-			var CBombe = 0.3;//chance d'avoir une bombe
+			var cBombe = 0.3;//chance d'avoir une bombe
+			var nbBombe = 0; //nombre de bombe
 			
-			// get DOM reference to table via selector table
+			// referencement de la table
 			var table = $('table');		
 			
-			// fonction qui trace la grille et place les bombes
+			// Trace la grille et place les bombes
 			function drawGrid(){
 
 				for (x = 0; x < height; x++) { 
@@ -103,11 +120,28 @@
 						var random = 10*Math.random(); // génère un nombre entre 0 et 10
 						
 						//generation des bombes
-						if(random < CBombe){
-						      cell.addClass('bomb');
+						if(random < cBombe){
+						    cell.addClass("bomb");
+							nbBombe++
 						}
-	
+						
 						newRow.append(cell);
+						
+						//action du clic gauche
+						cell.click(function(){
+							$(this).removeClass("cache")
+								
+							if($(this).hasClass("bomb")){
+								alert("Perdu!");
+								$('.bomb').addClass("afficheBomb");
+							}
+							else if(nbBombe == $(".cache").size()){
+								alert("Gagné!");
+							}		
+							else if ($(this).text() == '0'){
+								explodeZeros($(this));
+							}
+						});
 	
 					}
 
@@ -117,12 +151,10 @@
 				
 			} // fin de la fonction drawGrid
 
-			x = 0
-			y = 0
-			
-			// fonction qui permet de calculer, pour chaque case de la grille qui n'est pas une bombe
-			
-			// le nombre de bombes adjacentes
+			x = 0;
+			y = 0;
+		
+			//Calcul du nombre de bombe adjacente
 			function countAdjacentBombs(){
 				for (x = 0; x < height; x++){
 					for (y = 0; y < width; y++){
@@ -141,11 +173,49 @@
 							if($('.row'+(x+1)+'.col'+(y+1)).hasClass('bomb')){ count++;}
 
 							// on met la valeur du compteur dans la case (x;y)
-							$('.row'+x+'.col'+y).text(count); 
+							$('.row'+x+'.col'+y).text(count);
+							
+							//cache les chifres
+							$('.row'+x+'.col'+y).addClass("cache");
 						}
 					}
 				} 
-			} // fin de la fonction countAdjacentBombs	
+			} // fin de la fonction countAdjacentBombs
+			
+			//affiche les zeros
+			function explodeZeros(cell){
+
+				var col = parseInt(cell.attr('class').match(/\bcol(\d+)\b/)[1]);//Récupère le n° de colonne
+				var row = parseInt(cell.attr('class').match(/\brow(\d+)\b/)[1]);//Récupère le n° de ligne
+				
+				//Sélection des cases autour
+				var selectors = [
+					'.col'+(col-1)+'.row'+(row-1),
+					'.col'+col+'.row'+(row-1),
+					'.col'+(col+1)+'.row'+(row-1),
+					'.col'+(col-1)+'.row'+row,
+					'.col'+(col+1)+'.row'+row,
+					'.col'+(col-1)+'.row'+(row+1),
+					'.col'+col+'.row'+(row+1),
+					'.col'+(col+1)+'.row'+(row+1)
+				];
+				
+				//Pour chacune des cases
+				$.each(selectors, function(key){
+					
+					//Prend le sélecteur concerné
+					var current_cell = $(selectors[key]);
+					
+					//Si le texte indique 0 ET que la case est cachée, alors on enlève la classe "cache" et on rappelle la méthode
+					//On s'arrête lorsqu'on trouve autre chose que 0
+					if(current_cell.text() == "0" && current_cell.hasClass('cache')){
+						current_cell.removeClass('cache');
+						explodeZeros(current_cell);
+					} else {
+						current_cell.removeClass('cache');		
+					}		
+				});
+			}  
 			
 		</script>
 	</body>
