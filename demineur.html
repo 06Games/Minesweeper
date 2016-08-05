@@ -5,10 +5,19 @@
 		<title>Demineur</title>
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<style>
-		
+			h1{
+				position: absolute;
+				left:730px;
+				top:0px
+			}
+			
+			.flag{
+				background-image: url('20957.png');
+				background-size: 60px 60px;
+			}
+			
 			.cache{
 				font-size:0px;
-				background-size: 0px 0px;
 			}
 				
 			body{
@@ -25,7 +34,7 @@
 			table{
 				border-collapse: collapse;
 				position: absolute;
-				top:50px;
+				top:150px;
 				left:200px;
 			}
 			
@@ -36,55 +45,192 @@
 
 			button{
 				height:40px;
-				width:75px;
-			}
-			
-			#start{
+				width:95px;
 				position: absolute;
-				top:5px;
-				left:800px;
+				top:60px;
 			}
 			
 			#restart{
 				position: absolute;
-				top:5px;
-				left:700px;
+				top:60px;
+				left:750px;
+			}
+			
+			#triche{
+				position: absolute;
+				left:10px;
+			}
+			
+			#facile{
+				position: absolute;
+				left:110px;
+			}
+			
+			#moyen{
+				position: absolute;
+				left:210px;
+			}
+			
+			#difficile{
+				position: absolute;
+				left:310px;
+			}
+			
+			#hardcore{
+				position: absolute;
+				left:410px;
+			}
+			
+			#impossible{
+				position: absolute;
+				left:510px;
+			}
+			
+			td{
+				text-align:center
 			}
 			
 		</style>
 	</head>
 	<body>
 		
-		<button id="start" class="stop">Start</button>
+		<div>
+			Nombre de bombes:<span id="nb_bombes"></span>
+			Nombre de drapeaux:<span id="nb_flags"></span><br><br>
+		</div>
 		<button id="restart">Restart</button>
 		<button id="triche">SUPER TRICHE</button>
 		<button id="facile">FACILE</button>
 		<button id="moyen">MOYEN</button>
 		<button id="difficile">DIFFICILE</button>
 		<button id="hardcore">HARDCORE</button>
+		<button id="impossible">IMPOSSIBLE</button>
+		<div class="stop"></div>
+		<h1>Démineur</h1>
 		
 		<table>		
 		</table>
 
 		<script>
-		
+			var width = 18; // nombre de colonnes
+			var height = 10; // nombre de lignes
+			var cBombe = 0;//chance d'avoir une bombe
+			var nbBombe = 0; //nombre de bombe
+			
 			//demarage
-			$('#start').click(function(){
-				if ($('#start').hasClass("stop")){
+			$('button').click(function(){
+				if ($('div').hasClass("stop")){
 					drawGrid();
 					countAdjacentBombs();
-					$('#start').removeClass("stop");
-					$('#start').addClass("play");
+					$('div').removeClass("stop");
+					$('div').addClass("play");
+					
+					//Facile
+					if($(this).text() == "FACILE"){
+						cBombe = 0.3;
+						if (nbBombe > 10){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+						else if (nbBombe < 5){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+					}
+				
+					//Moyen
+					else if($(this).text() == "MOYEN"){
+						cBombe = 2;
+						if (nbBombe > 20){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+						else if (nbBombe < 30){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+					}
+					
+					//Difficile
+					else if($(this).text() == "DIFFICILE"){
+						cBombe = 3;
+						if (nbBombe > 30){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+						else if (nbBombe < 40){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+					}
+					
+					//Hardcore
+					else if($(this).text() == "HARDCORE"){
+						cBombe = 5;
+						if (nbBombe > 60){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+						else if (nbBombe < 50){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+					}
+					
+					//Impossible
+					else if($(this).text() == "IMPOSSIBLE"){
+						cBombe = 9;
+						if (nbBombe > 80){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+						else if (nbBombe < 60){
+							$('tr').remove();
+							y = 0;
+							x = 0;
+							drawGrid();
+							countAdjacentBombs();
+						}
+					}
 				}
 			});
 			
 			//redemarage
 			$('#restart').click(function(){
 				$('tr').remove();
-				$('#start').removeClass("play");
-				$('#start').addClass("stop");
+				$('div').removeClass("play");
+				$('div').addClass("stop");
 				y = 0;
 				x = 0;
+				nbBombe = 0;
+				nb_flags = 0;
 			});
 			
 			//triche
@@ -92,10 +238,7 @@
 				$('.bomb').addClass('afficheBomb')
 			})
 			
-			var width = 18; // nombre de colonnes
-			var height = 10; // nombre de lignes
-			var cBombe = 0.3;//chance d'avoir une bombe
-			var nbBombe = 0; //nombre de bombe
+			
 			
 			// referencement de la table
 			var table = $('table');		
@@ -122,7 +265,7 @@
 						//generation des bombes
 						if(random < cBombe){
 						    cell.addClass("bomb");
-							nbBombe++
+							nbBombe++;
 						}
 						
 						newRow.append(cell);
@@ -134,23 +277,39 @@
 							if($(this).hasClass("bomb")){
 								alert("Perdu!");
 								$('.bomb').addClass("afficheBomb");
+								$('td').removeClass("cache");
 							}
 							else if(nbBombe == $(".cache").size()){
 								alert("Gagné!");
+								$('td').removeClass("cache");
+								$('.bomb').addClass("afficheBomb");
 							}		
 							else if ($(this).text() == '0'){
 								explodeZeros($(this));
 							}
 						});
+						
+						//action du clic droit
+						cell.mousedown(function(e){
+							if(e.button == 2){
+								//si la case a la class flag, l'enlevé. Si la case a pas la class flag, l'ajouté
+								$(this).toggleClass('flag');
+								//l'ajoute dans le tableau
+								var nb_flags = $('.flag').size();
+								$('#nb_flags').text(nb_flags);
+							}
+						})
 	
 					}
 
 					/// ajoute le tableau
 					table.append(newRow);
+					$('#nb_bombes').text(nbBombe);
 				}
 				
 			} // fin de la fonction drawGrid
-
+			
+			//Remise à zero
 			x = 0;
 			y = 0;
 		
@@ -216,6 +375,11 @@
 					}		
 				});
 			}  
+		
+			//enlève le menu contrastruel
+			$(document).ready(function(){
+				$(document).bind('contextmenu', function(e){return false});
+			});
 			
 		</script>
 	</body>
